@@ -1,15 +1,8 @@
-const Koa = require('koa');
 const Router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
-
-const app = new Koa();
+// const router = new Router({prefix: '/users'});
 const router = new Router();
 
 const db = [{ name: "li lei" }];
-
-router.get('/', (ctx) => {
-    ctx.body = 'this is home';
-})
 
 router.get('/users', (ctx) => {
     console.log('?q:', ctx.query);
@@ -41,17 +34,9 @@ router.post('/users', ctx => {
     ctx.body = ctx.request.body;
 });
 
-
-
 router.delete('/users/:id', ctx => {
     db.splice(ctx.params.id * 1, 1);
     ctx.status = 204; //204 代表没有内容
 });
 
-
-app.use(bodyParser()); // 获取请求body
-app.use(router.routes());
-app.use(router.allowedMethods());
-
-app.listen(4000);
-
+module.exports = router;
