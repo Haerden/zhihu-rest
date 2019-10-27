@@ -1,5 +1,7 @@
 // const db = [{ name: "li lei" }];
+const jsonwebtoken = require('jsonwebtoken');
 const User = require('../model/users');
+const { secret } = require('../config');
 
 class UsersCtl {
     async find(ctx) {
@@ -51,6 +53,22 @@ class UsersCtl {
         }
 
         ctx.body = user;
+    }
+
+    async login(ctx) {
+        ctx.verifyParams({
+            name: { type: 'string', required: true },
+            password: { type: 'string', required: true }
+        });
+
+        const user = await User.findOne(ctx.request.body);
+        if (!user) {
+            ctx.throw(401, '用户名或密码不正确');
+        }
+
+        const { _id, name } = user;
+        const token = jsonwebtoken.sign({ _id, name }, secret, { expiresIn: '1d' });
+        ctx.body = { token };
     }
 }
 

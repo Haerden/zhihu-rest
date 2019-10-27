@@ -1,7 +1,9 @@
 const Router = require('koa-router');
 // const router = new Router({prefix: '/users'});
 const router = new Router();
-const { find, findById , update , create, delete: del} = require('../controllers/users');
+const { find, findById, update, create,
+    delete: del, login
+} = require('../controllers/users');
 
 router.get('/users', find);
 
@@ -13,5 +15,7 @@ router.patch('/users/:id', update);
 router.post('/users', create);
 
 router.delete('/users/:id', del);
+
+router.post('/users/login', login);
 
 module.exports = router;
