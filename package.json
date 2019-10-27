@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production nodemon app",
-    "dev": "node app"
+    "dev": "nodemon app"
   },
   "author": "lzh",
   "license": "ISC",
@@ -15,7 +15,8 @@
     "koa-bodyparser": "^4.2.1",
     "koa-json-error": "^3.1.2",
     "koa-parameter": "^3.0.1",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.7.6"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
