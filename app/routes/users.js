@@ -7,8 +7,8 @@ router.get('/users', find);
 
 router.get('/users/:id', findById);
 
-// 整体替换一项
-router.put('/users/:id', update);
+// 整体替换一项 put=(patch)=> 一部分（名称或密码）
+router.patch('/users/:id', update);
 
 router.post('/users', create);
 
