@@ -31,6 +31,7 @@ class UsersCtl {
         ctx.body = user;
     }
 
+    // 检查是否是本人
     async checkOwner(ctx, next) {
         if (ctx.params.id !== ctx.state.user._id) {
             ctx.throw(403, '没有权限');
