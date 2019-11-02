@@ -8,6 +8,7 @@ const userSchema = new Schema({
     password: { type: String, required: true, select: true },
     avatar_url: { type: String },
     gender: { type: String, enum: ['male', 'female'], default: 'male' },
+    headline: { type: String },
     locations: { type: [{ type: String }] },
     business: { type: String },
     employments: {
