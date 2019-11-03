@@ -8,8 +8,11 @@ class UsersCtl {
         ctx.body = await User.find();
     }
 
+    // 查询特定用户，字段筛选
     async findById(ctx) {
-        const user = await User.findById(ctx.params.id);
+        const { fields } = ctx.query;
+        const selectFields = fields.split(';').filter(f => f).map(f => ` +${f}`).join('');
+        const user = await User.findById(ctx.params.id).select(selectFields);
         if (!user) { ctx.throw(404, '用户不存在'); }
 
         ctx.body = user;
