@@ -27,6 +27,10 @@ const userSchema = new Schema({
             graduation_year: { type: Number }
         }],
         select: false
+    },
+    following: {
+        type: [{type: Schema.Types.ObjectId, ref: 'User'} ],
+        select: false
     }
 });
 
