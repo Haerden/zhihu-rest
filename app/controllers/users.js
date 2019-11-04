@@ -107,6 +107,18 @@ class UsersCtl {
         ctx.body = users;
     }
 
+    // 中间件：检查用户存在与否
+    async checkUserExist(ctx, next) {
+        const user = await User.findById(ctx.params.id);
+        console.log('user:', ctx.params.id, user);
+        
+        if (!user) {
+            ctx.throw(404, '用户不存在');
+        }
+
+        await next();
+    }
+
     async follow(ctx) {
         const me = await User.findById(ctx.state.user._id).select('+following');
 

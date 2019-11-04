@@ -3,7 +3,8 @@ const Router = require('koa-router');
 // const router = new Router({prefix: '/users'});
 const router = new Router();
 const { find, findById, update, create,
-    delete: del, login, checkOwner, listFollowing, listFollowers, follow, unfollow
+    delete: del, login, checkOwner, listFollowing, listFollowers,
+    checkUserExist, follow, unfollow
 } = require('../controllers/users');
 
 const { secret } = require('../config');
@@ -28,8 +29,8 @@ router.get('/users/:id/following', listFollowing); // 关注列表
 
 router.get('/users/:id/followers', listFollowers); // 粉丝列表
 
-router.put('/users/following/:id', auth, follow); // 添加关注
+router.put('/users/following/:id', auth, checkUserExist, follow); // 添加关注
 
-router.delete('/users/following/:id', auth, unfollow); // 取消关注
+router.delete('/users/following/:id', auth, checkUserExist, unfollow); // 取消关注
 
 module.exports = router;
