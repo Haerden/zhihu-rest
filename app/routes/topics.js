@@ -1,7 +1,7 @@
 const jwt = require('koa-jwt');
 const Router = require('koa-router');
 const router = new Router({ prefix: '/topics' });
-const router = new Router();
+// const router = new Router();
 
 const { find, findById, update, create,
 

@@ -10,7 +10,7 @@ class UsersCtl {
 
     // 查询特定用户，字段筛选
     async findById(ctx) {
-        const { fields } = ctx.query;
+        const { fields = '' } = ctx.query;
         const selectFields = fields.split(';').filter(f => f).map(f => ` +${f}`).join('');
         const user = await User.findById(ctx.params.id).select(selectFields);
         if (!user) { ctx.throw(404, '用户不存在'); }
@@ -111,7 +111,7 @@ class UsersCtl {
     async checkUserExist(ctx, next) {
         const user = await User.findById(ctx.params.id);
         console.log('user:', ctx.params.id, user);
-        
+
         if (!user) {
             ctx.throw(404, '用户不存在');
         }

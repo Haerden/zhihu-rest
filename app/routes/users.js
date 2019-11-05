@@ -4,7 +4,7 @@ const Router = require('koa-router');
 const router = new Router();
 const { find, findById, update, create,
     delete: del, login, checkOwner, listFollowing, listFollowers,
-    checkUserExiist, follow, unfollow
+    checkUserExist, follow, unfollow
 } = require('../controllers/users');
 
 const { secret } = require('../config');

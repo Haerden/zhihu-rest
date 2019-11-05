@@ -8,7 +8,7 @@ class TopicsCtl {
     }
 
     async findById(ctx) {
-        const { fields } = ctx.query;
+        const { fields = '' } = ctx.query;
 
         const selectFields = fields.split(';').filter(f => f).map(f => `+${f}`).join('');
 
@@ -38,7 +38,11 @@ class TopicsCtl {
             introduction: { type: 'string', required: false }
         });
 
-        const topic = Topic.findByIdAndUpdate(ctx.params.id, ctx.request.body);
+        const topic = await Topic.findByIdAndUpdate(ctx.params.id, ctx.request.body);
+
+        if (!topic) {
+            ctx.throw(404, 'id 不存在');
+        }
 
         ctx.body = topic; //(更新前的topic)
 
