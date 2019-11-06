@@ -5,7 +5,11 @@ const { secret } = require('../config');
 
 class UsersCtl {
     async find(ctx) {
-        ctx.body = await User.find();
+        // 分页
+        const { per_page = 3 } = ctx.query;
+        const page = Math.max(ctx.query.page * 1, 1) - 1;
+        const perPage = Math.max(per_page * 1, 1);
+        ctx.body = await User.find().limit(perPage).skip(perPage * page);
     }
 
     // 查询特定用户，字段筛选
