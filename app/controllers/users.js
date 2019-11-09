@@ -9,14 +9,17 @@ class UsersCtl {
         const { per_page = 3 } = ctx.query;
         const page = Math.max(ctx.query.page * 1, 1) - 1;
         const perPage = Math.max(per_page * 1, 1);
-        ctx.body = await User.find().limit(perPage).skip(perPage * page);
+        ctx.body = await User
+            .find({ name: new RegExp(ctx.query.q) })
+            .limit(perPage).skip(perPage * page);
     }
 
-    // 查询特定用户，字段筛选
+    // 查询特定用户，字段筛选 populate （id）=> object
     async findById(ctx) {
         const { fields = '' } = ctx.query;
         const selectFields = fields.split(';').filter(f => f).map(f => ` +${f}`).join('');
-        const user = await User.findById(ctx.params.id).select(selectFields);
+        const user = await User.findById(ctx.params.id).select(selectFields)
+        .populate('following locations business employments.company employments.jobs educations.school educations.major');
         if (!user) { ctx.throw(404, '用户不存在'); }
 
         ctx.body = user;
