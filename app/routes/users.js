@@ -4,8 +4,11 @@ const Router = require('koa-router');
 const router = new Router();
 const { find, findById, update, create,
     delete: del, login, checkOwner, listFollowing, listFollowers,
-    checkUserExist, follow, unfollow
+    checkUserExist, follow, unfollow,
+    followTopic, unfollowTopic, listFollowingTopics
 } = require('../controllers/users');
+
+const { checkTopicExist } = require('../controllers/topics');
 
 const { secret } = require('../config');
 
@@ -29,8 +32,14 @@ router.get('/users/:id/following', listFollowing); // 关注列表
 
 router.get('/users/:id/followers', listFollowers); // 粉丝列表
 
-router.put('/users/following/:id', auth, checkUserExist, follow); // 添加关注
+router.put('/users/following/:id', auth, checkUserExist, follow); // 添加关注人
 
-router.delete('/users/following/:id', auth, checkUserExist, unfollow); // 取消关注
+router.delete('/users/following/:id', auth, checkUserExist, unfollow); // 取消关注人
+
+router.get('/users/:id/followingTopics', listFollowingTopics); // 关注的话题列表
+
+router.put('/users/followingTopics/:id', auth, checkTopicExist, followTopic); // 添加关注话题
+
+router.delete('/users/followingTopics/:id', auth, checkTopicExist, unfollowTopic); // 取消关注话题
 
 module.exports = router;

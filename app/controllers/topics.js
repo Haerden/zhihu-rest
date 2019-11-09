@@ -13,6 +13,17 @@ class TopicsCtl {
             .limit(perPage).skip(page * perPage);
     }
 
+    // 中间件：检查Topic存在与否
+    async checkTopicExist(ctx, next) {
+        const topic = await Topic.findById(ctx.params.id);
+
+        if (!topic) {
+            ctx.throw(404, 'Topic 不存在');
+        }
+
+        await next();
+    }
+
     async findById(ctx) {
         const { fields = '' } = ctx.query;
 
