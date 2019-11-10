@@ -1,6 +1,7 @@
 // const db = [{ name: "li lei" }];
 const jsonwebtoken = require('jsonwebtoken');
 const User = require('../model/users');
+const Question = require('../model/questions');
 const { secret } = require('../config');
 
 class UsersCtl {
@@ -19,7 +20,7 @@ class UsersCtl {
         const { fields = '' } = ctx.query;
         const selectFields = fields.split(';').filter(f => f).map(f => ` +${f}`).join('');
         const user = await User.findById(ctx.params.id).select(selectFields)
-        .populate('following locations business employments.company employments.jobs educations.school educations.major');
+            .populate('following locations business employments.company employments.jobs educations.school educations.major');
         if (!user) { ctx.throw(404, '用户不存在'); }
 
         ctx.body = user;
@@ -117,7 +118,7 @@ class UsersCtl {
     // 中间件：检查用户存在与否
     async checkUserExist(ctx, next) {
         const user = await User.findById(ctx.params.id);
-        console.log('user:', ctx.params.id, user);
+        // console.log('user:', ctx.params.id, user);
 
         if (!user) {
             ctx.throw(404, '用户不存在');
@@ -182,6 +183,12 @@ class UsersCtl {
         }
 
         ctx.status = 204;
+    }
+
+    async listQuestions(ctx) {
+        // questioner => 引用了用户id
+        const questions = await Question.find({ questioner: ctx.params.id });
+        ctx.body = questions;
     }
 }
 

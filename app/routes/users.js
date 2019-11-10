@@ -5,7 +5,8 @@ const router = new Router();
 const { find, findById, update, create,
     delete: del, login, checkOwner, listFollowing, listFollowers,
     checkUserExist, follow, unfollow,
-    followTopic, unfollowTopic, listFollowingTopics
+    followTopic, unfollowTopic, listFollowingTopics,
+    listQuestions
 } = require('../controllers/users');
 
 const { checkTopicExist } = require('../controllers/topics');
@@ -41,5 +42,7 @@ router.get('/users/:id/followingTopics', listFollowingTopics); // 关注的话�
 router.put('/users/followingTopics/:id', auth, checkTopicExist, followTopic); // 添加关注话题
 
 router.delete('/users/followingTopics/:id', auth, checkTopicExist, unfollowTopic); // 取消关注话题
+
+router.get('/users/:id/questions', checkUserExist, listQuestions); // 关注问题列表
 
 module.exports = router;
