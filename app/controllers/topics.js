@@ -1,5 +1,6 @@
 //1 schma 2 controls 3 路由
 const Topic = require('../model/topics');
+const User = require('../model/users');
 // const { secret } = require('../config');
 
 class TopicsCtl {
@@ -64,7 +65,12 @@ class TopicsCtl {
         ctx.body = topic; //(更新前的topic)
 
     }
+    async listFollowers(ctx) {
+        // 话题里面包含该id话题的用户
+        const users = await User.find({ followingTopics: ctx.params.id});
 
+        ctx.body = users;
+    }
 }
 
 module.exports = new TopicsCtl();
