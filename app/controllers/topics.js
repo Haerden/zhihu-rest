@@ -1,7 +1,7 @@
 //1 schma 2 controls 3 路由
 const Topic = require('../model/topics');
 const User = require('../model/users');
-// const { secret } = require('../config');
+const Question = require('../model/questions');
 
 class TopicsCtl {
     async find(ctx) {
@@ -65,11 +65,18 @@ class TopicsCtl {
         ctx.body = topic; //(更新前的topic)
 
     }
+
     async listFollowers(ctx) {
         // 话题里面包含该id话题的用户
-        const users = await User.find({ followingTopics: ctx.params.id});
+        const users = await User.find({ followingTopics: ctx.params.id });
 
         ctx.body = users;
+    }
+
+    async listQuestions(ctx) {
+        const questions = await Question.find({ topics: ctx.params.id });
+
+        ctx.body = questions;
     }
 }
 

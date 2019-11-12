@@ -7,7 +7,9 @@ const questionSchema = new Schema({
     title: { type: String, select: true },
     description: { type: String },
     questioner: { type: Schema.Types.ObjectId, ref: 'User', select: false },
-
+    topics: {
+        type: [{ type: Schema.Types.ObjectId, ref: 'Topic' }], select: false
+    }
 });
 
 module.exports = model('Question', questionSchema);

@@ -32,7 +32,7 @@ class QuestionsCtl {
 
         const selectFields = fields.split(';').filter(f => f).map(f => `+${f}`).join('');
 
-        const question = await Question.findById(ctx.params.id).select(selectFields).populate('questioner');
+        const question = await Question.findById(ctx.params.id).select(selectFields).populate('questioner topics');
         ctx.body = question;
 
     }
@@ -71,7 +71,7 @@ class QuestionsCtl {
         // const question = await Question.findByIdAndUpdate(ctx.params.id, ctx.request.body);
         await ctx.state.question.update(ctx.request.body);
 
-        if (!question) {
+        if (!ctx.state.question) {
             ctx.throw(404, 'id 不存在');
         }
 

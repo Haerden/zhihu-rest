@@ -4,7 +4,8 @@ const router = new Router({ prefix: '/topics' });
 // const router = new Router();
 
 const { find, findById, update, create,
-    checkTopicExist, listFollowers
+    checkTopicExist, listFollowers,
+    listQuestions
 } = require('../controllers/topics');
 
 const { secret } = require('../config');
@@ -17,8 +18,10 @@ router.post('/', auth, create);
 
 router.get('/:id', findById);
 
-router.patch('/:id', auth, checkTopicExist,update);
+router.patch('/:id', auth, checkTopicExist, update);
 
-router.get('/:id/followers', checkTopicExist,listFollowers);
+router.get('/:id/followers', checkTopicExist, listFollowers);
+
+router.get('/:id/questions', checkTopicExist, listQuestions);
 
 module.exports = router;
