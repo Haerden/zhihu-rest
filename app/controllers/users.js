@@ -2,6 +2,7 @@
 const jsonwebtoken = require('jsonwebtoken');
 const User = require('../model/users');
 const Question = require('../model/questions');
+const Answer = require('../model/answers');
 const { secret } = require('../config');
 
 class UsersCtl {
@@ -189,6 +190,79 @@ class UsersCtl {
         // questioner => 引用了用户id
         const questions = await Question.find({ questioner: ctx.params.id });
         ctx.body = questions;
+    }
+    //赞答案
+    async listLikingAnswers(ctx) {
+        const user = await User.findById(ctx.params.id).select('+likingAnswers').populate('likingAnswers');
+
+        if (!user) {
+            ctx.throw(404, '用户不存在');
+        }
+
+        ctx.body = user.likingAnswers;
+    }
+
+    async likeAnswer(ctx, next) {
+        const me = await User.findById(ctx.state.user._id).select('+likingAnswers');
+
+        if (!me.likingAnswers.map(id => id.toString()).includes(ctx.params.id)) { // mongo=> string
+            me.likingAnswers.push(ctx.params.id);
+
+            me.save();
+            await Answer.findByIdAndUpdate(ctx.params.id, { $inc: { voteCount: 1 } });
+        }
+
+        ctx.status = 204;
+        await next();
+    }
+
+    async unlikeAnswer(ctx) {
+        const me = await User.findById(ctx.state.user._id).select('+likingAnswers');
+        const index = me.likingAnswers.map(id => id.toString()).indexOf(ctx.params.id);
+
+        if (index > -1) {
+            me.likingAnswers.splice(index, 1);
+            me.save();
+            await Answer.findByIdAndUpdate(ctx.params.id, { $inc: { voteCount: -1 } });
+        }
+
+        ctx.status = 204;
+    }
+
+    //踩答案
+    async listDislikingAnswers(ctx) {
+        const user = await User.findById(ctx.params.id).select('+dislikingAnswers').populate('dislikingAnswers');
+
+        if (!user) {
+            ctx.throw(404, '用户不存在');
+        }
+
+        ctx.body = user.dislikingAnswers;
+    }
+
+    async dislikeAnswer(ctx, next) {
+        const me = await User.findById(ctx.state.user._id).select('+dislikingAnswers');
+
+        if (!me.dislikingAnswers.map(id => id.toString()).includes(ctx.params.id)) { // mongo=> string
+            me.dislikingAnswers.push(ctx.params.id);
+
+            me.save();
+        }
+
+        ctx.status = 204;
+        await next();
+    }
+
+    async undislikeAnswer(ctx) {
+        const me = await User.findById(ctx.state.user._id).select('+dislikingAnswers');
+        const index = me.dislikingAnswers.map(id => id.toString()).indexOf(ctx.params.id);
+
+        if (index > -1) {
+            me.dislikingAnswers.splice(index, 1);
+            me.save();
+        }
+
+        ctx.status = 204;
     }
 }
 

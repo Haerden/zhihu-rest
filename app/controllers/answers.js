@@ -21,8 +21,8 @@ class AnswersCtl {
         if (!answer) {
             ctx.throw(404, 'answer 不存在');
         }
-        // 答案是否在问题下
-        if (answer.questionId !== ctx.params.questionId) {
+        // 路由中有问题时才检查，答案是否在问题下；赞和踩答案不检查
+        if (ctx.params.questionId && answer.questionId !== ctx.params.questionId) {
             ctx.throw(404, '该问题下 没有此答案');
         }
 

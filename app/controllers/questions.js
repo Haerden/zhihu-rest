@@ -78,6 +78,7 @@ class QuestionsCtl {
         ctx.body = ctx.state.question; //(更新前的question ?)
 
     }
+
     async delete(ctx) {
         await Question.findByIdAndRemove(ctx.params.id);
 
